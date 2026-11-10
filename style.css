@@ -44,6 +44,7 @@ h1 {
 .filters {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
   margin-bottom: 20px;
@@ -168,8 +169,8 @@ button:focus-visible, input:focus-visible { outline: 3px solid #fff; outline-off
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 10; }
 .modal[hidden] { display: none; }
 .modal-content { background: #1a1d2e; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 8px; padding: 20px; position: relative; }
-.modal-content img, .modal-content iframe { width: 100%; border-radius: 6px; }
-.modal-content iframe { aspect-ratio: 16/9; border: 0; }
+.modal-content img, .modal-content iframe, .modal-content video { width: 100%; border-radius: 6px; }
+.modal-content iframe, .modal-content video { aspect-ratio: 16/9; border: 0; }
 .modal-date { color: #aaa; margin: 4px 0 12px; }
 .close-btn { position: absolute; top: 10px; right: 10px; width: 40px; padding: 4px; font-size: 24px; }
 .video-link { display: block; padding: 40px; text-align: center; color: #fff; background: var(--nasa-blue); border-radius: 6px; }
@@ -234,3 +235,8 @@ body.is-offline .site-header h1::after {
   font-size: 0.55em;
   vertical-align: middle;
 }
+
+.surprise-btn {
+  background: #155e75 !important;
+}
+.surprise-btn:hover { background: #0e4a5c !important; }

@@ -9,10 +9,11 @@ This is a **separate** copy of the original app so the live non-PWA site stays u
 - **Original repo:** https://github.com/zljones1/nasa-space-explorer
 
 ## App features
-- Pick a start date and the app gets **9 days in a row** of APOD pictures from NASA's API
+- Pick a start date and the app gets **9 days in a row** of APOD pictures from NASA's live API
+- **Random 9** button loads nine surprise pictures from the archive
 - Gallery cards with modal details, video support, hover zoom, and a random space fact
 - NASA brand colors (`#0B3D91`, `#FC3D21`) and fonts (Inter / Public Sans)
-- Live NASA API with course backup fallback when the feed is down
+- Uses NASA's current WordPress APOD API (`science.nasa.gov/wp-json/wp/v2/apod-basic`), with a timeout and a course-backup fallback only when the live feed is down
 
 ## PWA features (LevelUp)
 - **Web App Manifest** (`manifest.json`) — `display: "standalone"`, relative `start_url` / `scope` (`./`), theme/background colors, 192 & 512 icons (any + maskable)
@@ -30,4 +31,4 @@ This is a **separate** copy of the original app so the live non-PWA site stays u
 6. Stop recording. Submit the **repo link + video** on HQ yourself (do not have anyone else submit for you).
 
 ## API key
-The key is in `const API_KEY` at the top of `js/script.js` (same as the original). It defaults to `DEMO_KEY`. Get a free key at https://api.nasa.gov if you hit rate limits.
+A personal key from https://api.nasa.gov is in `const API_KEY` at the top of `js/script.js`. After NASA's September 2026 APOD site migration, the legacy `api.nasa.gov/planetary/apod` endpoint often returns a "NASA Science" logo instead of the real picture, so this PWA requests each date from the new official API.

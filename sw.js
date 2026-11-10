@@ -2,7 +2,7 @@
  * - App shell: cache-first
  * - NASA API + image hosts: network-first with cache fallback
  */
-const CACHE_VERSION = 'space-explorer-pwa-v2';
+const CACHE_VERSION = 'space-explorer-pwa-v3';
 const SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const DATA_CACHE = `${CACHE_VERSION}-data`;
 
@@ -21,6 +21,31 @@ const SHELL_URLS = [
   './icons/apple-touch-icon.png',
   './manifest.json'
 ];
+
+
+function looksLikePlaceholderPayload(data) {
+  const items = Array.isArray(data) ? data : (data && typeof data === 'object' ? [data] : []);
+  if (items.length === 0) return true;
+  return items.every((item) => {
+    const haystack = `${item.title || ''} ${item.url || ''} ${item.hdurl || ''}`;
+    return item.title === 'NASA Science' || /nasa-logo/i.test(haystack);
+  });
+}
+
+async function isCacheableApiOrMedia(request, response) {
+  const url = new URL(request.url);
+  const isApodJson = (
+    (url.hostname === 'api.nasa.gov' && url.pathname.includes('/planetary/apod')) ||
+    (url.hostname.endsWith('science.nasa.gov') && url.pathname.includes('/wp-json/wp/v2/apod-basic'))
+  );
+  if (!isApodJson) return true;
+  try {
+    const data = await response.clone().json();
+    return !looksLikePlaceholderPayload(data);
+  } catch (err) {
+    return false;
+  }
+}
 
 function isApiOrMedia(url) {
   const host = url.hostname;
@@ -77,30 +102,33 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // NASA API + remote images → network-first, cache on success, fall back to cache
+  // NASA API + remote images → network-first, cache on success, fall back to cache.
+  // Do not cache placeholder APOD JSON (legacy API often returns the NASA logo).
   if (isApiOrMedia(url)) {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          if (response && response.ok) {
+    event.respondWith((async () => {
+      try {
+        const response = await fetch(event.request);
+        if (response && response.ok) {
+          const shouldCache = await isCacheableApiOrMedia(event.request, response);
+          if (shouldCache) {
             const copy = response.clone();
-            caches.open(DATA_CACHE).then((cache) => cache.put(event.request, copy));
+            const cache = await caches.open(DATA_CACHE);
+            await cache.put(event.request, copy);
           }
-          return response;
-        })
-        .catch(async () => {
-          const cached = await caches.match(event.request);
-          if (cached) {
-            // Tell clients we served cached API/media while offline
-            const clients = await self.clients.matchAll({ type: 'window' });
-            clients.forEach((client) => {
-              client.postMessage({ type: 'OFFLINE_CACHE_HIT', url: event.request.url });
-            });
-            return cached;
-          }
-          return Response.error();
-        })
-    );
+        }
+        return response;
+      } catch (err) {
+        const cached = await caches.match(event.request);
+        if (cached) {
+          const clients = await self.clients.matchAll({ type: 'window' });
+          clients.forEach((client) => {
+            client.postMessage({ type: 'OFFLINE_CACHE_HIT', url: event.request.url });
+          });
+          return cached;
+        }
+        return Response.error();
+      }
+    })());
   }
 });
 
