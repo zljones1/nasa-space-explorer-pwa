@@ -137,10 +137,14 @@ function normalizeItem(item) {
   const imageUrl = isMediaFile(item.hdurl)
     ? item.hdurl
     : (isMediaFile(item.url) ? item.url : (item.hdurl || item.url || ''));
-  const videoUrl = extractVideoUrl(item.basic_html) ||
-    (/\.(mp4|webm)(\?|$)/i.test(item.hdurl || '') ? item.hdurl : '') ||
-    (/\.(mp4|webm)(\?|$)/i.test(item.url || '') ? item.url : '');
-  const isVideo = item.media_type === 'video' || Boolean(videoUrl);
+  // Only treat an entry as a video when NASA marks it that way. Image pages
+  // sometimes mention another day's .mp4 in their HTML, which is not this item.
+  const isVideo = item.media_type === 'video';
+  const videoUrl = isVideo
+    ? (extractVideoUrl(item.basic_html) ||
+      (/\.(mp4|webm)(\?|$)/i.test(item.hdurl || '') ? item.hdurl : '') ||
+      (/\.(mp4|webm)(\?|$)/i.test(item.url || '') ? item.url : ''))
+    : '';
   return {
     date: item.date,
     title: item.title,
