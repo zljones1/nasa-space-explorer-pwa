@@ -1,0 +1,236 @@
+/* Global reset & box sizing */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base page styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
+/* Centered container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-family: Verdana, sans-serif;
+  font-weight: bold;
+  color: #212121;
+}
+
+/* Logo */
+.logo {
+  width: 140px;
+  margin-right: 15px;
+}
+
+/* Date‐picker & button row */
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
+/* Inputs and buttons */
+input[type="date"],
+button {
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+  color: #666;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 1.4;
+  width: 100%;
+}
+
+/* Button specific */
+button {
+  background-color: #d3d3d3;
+  color: black;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #bfbfbf;
+}
+
+/* Stack horizontally on wider screens */
+@media (min-width: 600px) {
+  .filters {
+    flex-direction: row;
+    padding: 0;
+  }
+  
+  input[type="date"],
+  button {
+    width: auto;
+  }
+}
+
+/* Gallery flex container */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  justify-content: center;
+}
+
+/* Gallery items */
+.gallery-item {
+  flex: 1 1 100%;  /* full width by default */
+  min-width: 280px;
+  max-width: 500px;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Three columns on wider screens */
+@media (min-width: 1000px) {
+  .gallery-item {
+    flex: 0 1 31%;
+  }
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.gallery-item p {
+  margin-top: 10px;
+  padding: 5px;
+  font-size: 14px;
+}
+
+/* Placeholder content */
+.placeholder {
+  flex: 1 1 100%;
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.placeholder-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+/* ===== Custom styles: NASA brand colors & fonts ===== */
+:root { --nasa-blue: #0B3D91; --nasa-red: #FC3D21; --space: #0b0d17; }
+body { font-family: 'Inter', Arial, sans-serif; background: var(--space); color: #f1f1f1; }
+h1, h2 { font-family: 'Public Sans', Verdana, sans-serif; color: #fff; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+button { background: var(--nasa-red); color: #fff; border: none; font-weight: 600; }
+button:hover { background: #d92f15; }
+button:disabled { opacity: .6; cursor: wait; }
+button:focus-visible, input:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.fact { background: var(--nasa-blue); padding: 12px 16px; border-radius: 6px; margin: 0 20px 20px; }
+.gallery { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; padding: 0 20px; }
+.placeholder, .loading, .error { grid-column: 1 / -1; text-align: center; padding: 40px; color: #ccc; font-size: 18px; }
+.error { color: #ff8a7a; }
+.gallery-item { background: #1a1d2e; color: #fff; padding: 10px; border-radius: 8px; text-align: left; cursor: pointer; width: 100%; }
+.gallery-item:hover { background: #24283d; }
+.thumb { position: relative; overflow: hidden; border-radius: 6px; aspect-ratio: 4/3; background: #000; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+.gallery-item:hover .thumb img { transform: scale(1.08); } /* LevelUp: hover zoom */
+.no-thumb { display: grid; place-items: center; height: 100%; font-size: 24px; }
+.badge { position: absolute; top: 8px; left: 8px; background: var(--nasa-red); padding: 2px 8px; border-radius: 4px; font-size: 13px; }
+.title { font-weight: 600; margin-top: 8px; }
+.date { color: #aaa; font-size: 14px; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 10; }
+.modal[hidden] { display: none; }
+.modal-content { background: #1a1d2e; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 8px; padding: 20px; position: relative; }
+.modal-content img, .modal-content iframe { width: 100%; border-radius: 6px; }
+.modal-content iframe { aspect-ratio: 16/9; border: 0; }
+.modal-date { color: #aaa; margin: 4px 0 12px; }
+.close-btn { position: absolute; top: 10px; right: 10px; width: 40px; padding: 4px; font-size: 24px; }
+.video-link { display: block; padding: 40px; text-align: center; color: #fff; background: var(--nasa-blue); border-radius: 6px; }
+.notice { margin: 0 20px 20px; padding: 10px 14px; border-left: 4px solid var(--nasa-red); background: #1a1d2e; border-radius: 4px; }
+.notice[hidden] { display: none; }
+
+/* ===== PWA LevelUp styles ===== */
+.offline-banner {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #3d2a00;
+  color: #ffd27a;
+  border-bottom: 2px solid #fc3d21;
+  text-align: center;
+  padding: 10px 16px;
+  font-weight: 600;
+}
+.offline-banner[hidden] { display: none; }
+
+.install-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 20px 16px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #0B3D91, #1a1d2e);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 10px;
+}
+.install-banner[hidden] { display: none; }
+.install-copy { display: flex; flex-direction: column; gap: 4px; }
+.install-copy span { color: #c9d4ef; font-size: 14px; }
+.install-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.ghost-btn {
+  background: transparent !important;
+  border: 1px solid rgba(255,255,255,.35) !important;
+  color: #fff !important;
+}
+.ghost-btn:hover { background: rgba(255,255,255,.08) !important; }
+
+.ios-hint {
+  margin: 0 20px 16px;
+  padding: 12px 14px;
+  background: #1a1d2e;
+  border-left: 4px solid var(--nasa-blue);
+  border-radius: 4px;
+  color: #dce6ff;
+}
+.ios-hint[hidden] { display: none; }
+
+.secondary-btn {
+  background: var(--nasa-blue) !important;
+}
+.secondary-btn:hover { background: #0a3278 !important; }
+
+body.is-offline .site-header h1::after {
+  content: " · Offline";
+  color: #ffd27a;
+  font-size: 0.55em;
+  vertical-align: middle;
+}
